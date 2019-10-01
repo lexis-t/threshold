@@ -52,11 +52,11 @@ func main() {
 	//messageHash := sha256.Sum256([]byte("test message"))
 	messageHash, _ := hex.DecodeString("07BE073995BF78D440B660AF7B06DC0E9BA120A8D686201989BA99AA384ADF12")
 
-	nonce1 := threshold.NonceRFC69791(private1.Serialize(), messageHash[:], nil, threshold.Sha256VersionStringRFC6979) //not work
-	nonce2 := threshold.NonceRFC69791(private2.Serialize(), messageHash[:], nil, threshold.Sha256VersionStringRFC6979) //not work
-	nonce3 := threshold.NonceRFC69791(private3.Serialize(), messageHash[:], nil, threshold.Sha256VersionStringRFC6979) //not work
-	nonce4 := threshold.NonceRFC69791(private4.Serialize(), messageHash[:], nil, threshold.Sha256VersionStringRFC6979) //not work
-	nonce5 := threshold.NonceRFC69791(private5.Serialize(), messageHash[:], nil, threshold.Sha256VersionStringRFC6979) //not work
+	nonce1 := threshold.NonceRFC6979(private1.Serialize(), messageHash[:], nil, threshold.Sha256VersionStringRFC6979) //not work
+	nonce2 := threshold.NonceRFC6979(private2.Serialize(), messageHash[:], nil, threshold.Sha256VersionStringRFC6979) //not work
+	nonce3 := threshold.NonceRFC6979(private3.Serialize(), messageHash[:], nil, threshold.Sha256VersionStringRFC6979) //not work
+	nonce4 := threshold.NonceRFC6979(private4.Serialize(), messageHash[:], nil, threshold.Sha256VersionStringRFC6979) //not work
+	nonce5 := threshold.NonceRFC6979(private5.Serialize(), messageHash[:], nil, threshold.Sha256VersionStringRFC6979) //not work
 
 	sig1, _ := threshold.SchnorrPartialSign(messageHash[:], private1.Serialize(), nonce1, combinedPubKeys, testSchnorrSha256Hash)
 	sig2, _ := threshold.SchnorrPartialSign(messageHash[:], private2.Serialize(), nonce2, combinedPubKeys, testSchnorrSha256Hash)
