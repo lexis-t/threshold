@@ -146,7 +146,7 @@ func SchnorrPartialSign(msg []byte, priv []byte, privNonce []byte,
 		str := fmt.Sprintf("priv scalar is out of bounds")
 		return nil, schnorrError(ErrInputValue, str)
 	}
-	privBig.SetInt64(0)
+	//privBig.SetInt64(0) //!!!
 
 	privNonceBig := new(big.Int).SetBytes(privNonce)
 	if privNonceBig.Cmp(bigZero) == 0 {
@@ -157,7 +157,7 @@ func SchnorrPartialSign(msg []byte, priv []byte, privNonce []byte,
 		str := fmt.Sprintf("privNonce scalar is out of bounds")
 		return nil, schnorrError(ErrInputValue, str)
 	}
-	privNonceBig.SetInt64(0)
+	//privNonceBig.SetInt64(0) //!!!
 
 	if !curve.IsOnCurve(pubSum.GetX(), pubSum.GetY()) {
 		str := fmt.Sprintf("public key sum is off curve")
@@ -326,10 +326,10 @@ func SchnorrSign(msg []byte, ps []byte, k []byte,
 	}
 
 	// Zero out the private key and nonce when we're done with it.
-	bigK.SetInt64(0)
-	zeroSlice(k)
-	psBig.SetInt64(0)
-	zeroSlice(ps)
+	//bigK.SetInt64(0) //!!!
+	//zeroSlice(k)
+	//psBig.SetInt64(0) //!!!
+	//zeroSlice(ps)
 
 	return &Signature{Rpx, sBig}, nil
 }
