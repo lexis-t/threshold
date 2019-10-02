@@ -55,6 +55,22 @@ func SchnorrSha256Hash(msg []byte) []byte {
 	return sha[:]
 }
 
+// GenerateKeys is a wrapper for secp256k1.GeneratePrivateKey() and secp256k1.NewPublicKey()
+// that returns a random PrivateKey and PublicKey
+func GenerateKeys() (*secp256k1.PrivateKey, *secp256k1.PublicKey, error) {
+	privateKey, err := secp256k1.GeneratePrivateKey()
+	publicKey := secp256k1.NewPublicKey(privateKey.Public())
+	return privateKey, publicKey, err
+}
+
+// GenerateNonces is a wrapper for NonceRFC6979() and PrivKeyFromBytes()
+// that returns a PrivateNonce and PublicNonce
+func GenerateNonces(privateKey *secp256k1.PrivateKey, messageHash []byte) ([]byte, *secp256k1.PublicKey) {
+	privateNonce := NonceRFC6979(privateKey.Serialize(), messageHash, nil, Sha256VersionStringRFC6979)
+	_, publicNonce := secp256k1.PrivKeyFromBytes(privateNonce)
+	return privateNonce, publicNonce
+}
+
 // Serialize returns the Schnorr signature in the more strict format.
 //
 // The signatures are encoded as
