@@ -8,7 +8,7 @@ import (
 )
 
 // This example demonstrates signing a secp256k1 private key message for two parties
-func Example_ForTwoNodes_signMessage() {
+func Example_ForTwoNodesSignMessage() {
 	// Generate public and private keys
 	// for node 1
 	private1, _ := secp256k1.GeneratePrivateKey()
