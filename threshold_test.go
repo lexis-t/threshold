@@ -9,7 +9,6 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 
-	"fmt"
 	"math/rand"
 	"testing"
 
@@ -249,26 +248,21 @@ func TestSchnorrThresholdRef(t *testing.T) {
 	tvs := GetThresholdTestVectors()
 	for _, tv := range tvs {
 		partialSignatures := make([]*Signature, len(tv.signers))
-		fmt.Println("")
 		// Ensure all the pubkey and nonce derivation is correct.
 		for i, signer := range tv.signers {
 			nonce := NonceRFC6979(signer.privkey, tv.msg, nil, Sha256VersionStringRFC6979)
-			fmt.Printf("nonce: %x\n", nonce)
 			cmp := bytes.Equal(nonce[:], signer.privateNonce[:])
 			if !cmp {
 				t.Fatalf("expected %v, got %v", true, cmp)
 			}
 
 			_, pubkey := secp256k1.PrivKeyFromBytes(signer.privkey)
-			fmt.Printf("pubkey: %x\n", pubkey.Serialize())
 			cmp = bytes.Equal(pubkey.Serialize()[:], signer.pubkey.Serialize()[:])
 			if !cmp {
 				t.Fatalf("expected %v, got %v", true, cmp)
 			}
 
 			_, pubNonce := secp256k1.PrivKeyFromBytes(nonce)
-			fmt.Printf("pubNonce: %x\n", pubNonce.Serialize())
-			fmt.Printf("publicNonce: %x\n", signer.publicNonce.Serialize())
 			cmp = bytes.Equal(pubNonce.Serialize()[:], signer.publicNonce.Serialize()[:])
 			if !cmp {
 				t.Fatalf("expected %v, got %v", true, cmp)
@@ -276,7 +270,6 @@ func TestSchnorrThresholdRef(t *testing.T) {
 
 			// Calculate the public nonce sum.
 			pubKeys := make([]*secp256k1.PublicKey, len(tv.signers)-1)
-			fmt.Printf("pubKeys: [\n")
 			itr := 0
 			for _, signer := range tv.signers {
 				if bytes.Equal(signer.publicNonce.Serialize(),
@@ -284,19 +277,15 @@ func TestSchnorrThresholdRef(t *testing.T) {
 					continue
 				}
 				pubKeys[itr] = signer.publicNonce
-				fmt.Printf("%x ,\n", signer.publicNonce.Serialize())
 				itr++
 			}
-			fmt.Printf("]\n")
 			publicNonceSum := CombinePubkeys(pubKeys)
-			fmt.Printf("pub: %x \n", publicNonceSum.Serialize())
 			cmp = bytes.Equal(publicNonceSum.Serialize()[:], signer.pubKeySumLocal.Serialize()[:])
 			if !cmp {
 				t.Fatalf("expected %v, got %v", true, cmp)
 			}
 
 			sig, err := SchnorrPartialSign(tv.msg, signer.privkey, nonce, publicNonceSum, testSchnorrSha256Hash)
-			fmt.Printf("sig: %x\n", sig.Serialize())
 			if err != nil {
 				t.Fatalf("unexpected error %s, ", err)
 			}
@@ -308,7 +297,6 @@ func TestSchnorrThresholdRef(t *testing.T) {
 
 			partialSignatures[i] = sig
 		}
-
 		// Combine signatures.
 		combinedSignature, err := CombineSigs(partialSignatures)
 		if err != nil {

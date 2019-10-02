@@ -6,6 +6,7 @@ package threshold
 
 import (
 	"bytes"
+	"crypto/sha256"
 	"fmt"
 	"math/big"
 
@@ -46,6 +47,12 @@ var (
 // NewSignature instantiates a new signature given some R,S values.
 func NewSignature(r, s *big.Int) *Signature {
 	return &Signature{r, s}
+}
+
+// SchnorrSha256Hash used to encrypt messages
+func SchnorrSha256Hash(msg []byte) []byte {
+	sha := sha256.Sum256(msg)
+	return sha[:]
 }
 
 // Serialize returns the Schnorr signature in the more strict format.
